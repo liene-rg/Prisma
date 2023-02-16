@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+
+  id String @id @default(uuid()) // uuid - random and unique, therefore more secure
+  userName String
+  email String
+  role Role @default(BASIC)
+  password String 
+  blogs Blog[]
+
+@@map("user") // not sure if needed
+@@unique([userName, email]) // cant have 2 users with the same name and email
+@@index([password], type: Hash)
+}
+
+model Blog {
+
+  id String @id @default(uuid())
+  title String
+  textBox String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author User @relation(fields: [authorId], references: [id])
+  authorId String
+
+  //@@id([title, authorId]) // can also reference IDs like this
+}
+
+enum Role {
+  BASIC
+  ADMIN 
+}
