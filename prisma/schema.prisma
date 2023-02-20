@@ -14,6 +14,7 @@ model User {
 
   id String @id @default(uuid()) // uuid - random and unique, therefore more secure
   userName String
+  name String
   email String
   role Role @default(BASIC)
   password String 
